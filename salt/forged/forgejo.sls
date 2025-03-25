@@ -21,6 +21,16 @@ forgejo_config:
       - forgejo_packages
     - source: salt://{{ slspath }}/files/etc/forgejo/conf/app.ini.j2
 
+{%- if pillar.forgejo.get("use_apparmor", False) %}
+forgejo_load_apparmor:
+  cmd.run:
+    - name: /sbin/apparmor_parser -r /etc/apparmor.d/forgejo
+    - require:
+      - forgejo_packages
+    - require_in:
+      - forgejo_service
+{%- endif %}
+
 forgejo_service:
   service.running:
     - name: forgejo.service

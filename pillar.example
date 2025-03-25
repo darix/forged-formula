@@ -7,6 +7,7 @@ include:
 # see https://forgejo.org/docs/next/admin/config-cheat-sheet for additional documentation.
 #
 forgejo:
+  use_apparmor: True
   config:
     server:
       PROTOCOL:           http
