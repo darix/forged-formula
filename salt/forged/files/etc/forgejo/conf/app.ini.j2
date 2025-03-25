@@ -1,0 +1,44 @@
+;;
+;; see https://forgejo.org/docs/next/admin/config-cheat-sheet for additional documentation.
+;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; General Settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; App name that shows in every page title
+APP_NAME =  {{ pillar.forgejo.get('app_name', 'Forgejo: Beyond coding. We Forge.') }}
+;;
+;; The working directory, see the comment of AppWorkPath above
+WORK_PATH = {{ pillar.forgejo.get('work_dir', '/var/lib/forgejo') }}
+;;
+;; Application run mode, affects performance and debugging: "dev" or "prod", default is "prod"
+;; Mode "dev" makes Gitea easier to develop and debug, values other than "dev" are treated as "prod" which is for production use.
+RUN_MODE =  {{ pillar.forgejo.get('run_mode', 'prod') }}
+;;
+;; RUN_USER will automatically detect the current user - but you can set it here change it if you run locally
+RUN_USER =  {{ pillar.forgejo.get('run_user', 'forgejo') }}
+{%- if "app_slogan" in pillar.forgejo %}
+;;
+;; APP_SLOGAN shows a slogan near the App name in every page title.
+APP_SLOGAN = {{ pillar.forgejo.app_slogan }}
+{%- endif %}
+{%- if "app_display_name_format" in pillar.forgejo %}
+;;
+;; APP_DISPLAY_NAME_FORMAT defines how the AppDisplayName should be presented
+;; It is used only if APP_SLOGAN is set.
+APP_DISPLAY_NAME_FORMAT = {{ pillar.forgejo.app_display_name_format }}
+{%- endif %}
+
+{%- for key, value in pillar.forgejo.config.items() %}
+  {%- if value is string %}
+{{ key }} = {{ value }}
+  {%- else %}
+
+[{{ key }}]
+    {%- for sub_key, sub_value in value.items() %}
+{{ sub_key }} = {{ sub_value }}
+    {%- endfor %}
+  {%- endif %}
+{%- endfor %}

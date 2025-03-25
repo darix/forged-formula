@@ -1,0 +1,43 @@
+include:
+  - includes.forgejo-runner-defaults
+  - includes.forgejo-defaults
+
+## forgejo
+#
+# see https://forgejo.org/docs/next/admin/config-cheat-sheet for additional documentation.
+#
+forgejo:
+  config:
+    server:
+      PROTOCOL:           http
+      SSH_DOMAIN:         {{ grains.id }}
+      DOMAIN:             {{ grains.id }}
+      ROOT_URL:           http://{{ grains.id }}:3000/
+      DISABLE_SSH:        "false"
+      LFS_START_SERVER:   "true"
+      LFS_JWT_SECRET:     {{ "forgejo/lfs_jwt_secret" | gopass }}
+    database:
+      DB_TYPE:            postgres
+      HOST:               {{ grains.id }}:5432
+      NAME:               forgejo
+      USER:               forgejo
+      PASSWD:             {{ "forgejo/db_password" | gopass }}
+      SSL_MODE:           verify-full
+    security:
+      INSTALL_LOCK:       "true"
+      SECRET_KEY:         {{ "forgejo/security_secret_key" | gopass }}
+      INTERNAL_TOKEN:     {{ "forgejo/security_internal_token" | gopass }}
+      PASSWORD_HASH_ALGO: pbkdf2_hi
+    oauth2:
+      ENABLED:            "false"
+      JWT_SECRET:         {{ "forgejo/oauth2_jwt_secret" | gopass }}
+
+## forgejo_runner
+#
+# if you don't want to change anything beyond the default config you are already good to go.
+# the include will provide you the same default config which is already in the package.
+# if you want salt to automatically register the runner you can pass
+#
+# forgejo_runner:
+#   external_server:       http://{{ grains.id }}
+#   runner_token:          {{ "forgejo_runner/registration_token" | gopass }}
