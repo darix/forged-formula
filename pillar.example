@@ -41,3 +41,30 @@ forgejo:
 # forgejo_runner:
 #   external_server:       http://{{ grains.id }}
 #   runner_token:          {{ "forgejo_runner/registration_token" | gopass }}
+
+
+## this requires the profile-base.systemd-overrides from the suse-profile-base formula
+#
+# ensure that the runner service only starts when the container engine is up:
+# for docker use container_service docker.service
+#
+# {%- set container_service = "podman.socket" %}
+# systemd:
+#  overrides:
+#    forgejo-runner.service:
+#      Unit:
+#        - After={{ container_service }}
+#        - BindsTo={{ container_service }}
+#
+# forgejo_runner:
+#   # ensure salt sets up the container engine before forgejo-runner
+#   require:
+#     - podman_socket_service
+#     - systemd_override_forgejo-runner_service
+#     - systemd_daemon_reload
+#   external_server:       http://{{ grains.id }}
+#   runner_token:          {{ "forgejo_runner/registration_token" | gopass }}
+#   container:
+#     # tell it to use the podman socket
+#     docker_host: unix:///run/podman/podman.sock
+#
