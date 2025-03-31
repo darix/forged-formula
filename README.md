@@ -22,6 +22,16 @@ pillar_roots:
     - {{ formulas_base_dir }}/forged/pillar/
 ```
 
+## cfgmgmt-template integration
+
+if you are using our [cfgmgmt-template](https://github.com/darix/cfgmgmt-template) as a starting point the saltmaster you can simplify the setup with:
+
+```
+git submodule add https://github.com/darix/forged formulas/forged
+ln -s /srv/cfgmgmt/formulas/forged/config/enable_step_ca.conf /etc/salt/master.d/
+systemctl restart saltmaster
+```
+
 ## How to use
 
 Follow pillar.example for your pillar settings.
