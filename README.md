@@ -28,7 +28,7 @@ if you are using our [cfgmgmt-template](https://github.com/darix/cfgmgmt-templat
 
 ```
 git submodule add https://github.com/darix/forged formulas/forged
-ln -s /srv/cfgmgmt/formulas/forged/config/enable_step_ca.conf /etc/salt/master.d/
+ln -s /srv/cfgmgmt/formulas/forged/config/enable_forged.conf /etc/salt/master.d/
 systemctl restart saltmaster
 ```
 
